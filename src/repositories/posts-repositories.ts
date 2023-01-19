@@ -8,19 +8,19 @@ export class PostsRepository {
         this.postModel = PostModel
     }
 
-    public async getAllPosts() {
+    public async getAllPosts(): Promise<IPost[]> {
         return this.postModel.find()
     }
 
-    public async createPost(title: string, shortDescription: string, content: string, blogId: string | undefined, blogName: string | undefined) {
+    public async createPost(title: string, shortDescription: string, content: string, blogId: string | undefined, blogName: string | undefined): Promise<IPost> {
         return await this.postModel.create({title, shortDescription, content, blogId, blogName})
     }
 
-    public async getOnePost(id: RefType) {
+    public async getOnePost(id: RefType): Promise<IPost | null> {
         return this.postModel.findById({_id:id})
     }
 
-    public async updatePost(id: RefType, title: string, shortDescription: string, content: string, blogId: string) {
+    public async updatePost(id: RefType, title: string, shortDescription: string, content: string, blogId: string): Promise<IPost | null> {
         return this.postModel.findOneAndUpdate({_id:id}, {
             title,
             shortDescription,
