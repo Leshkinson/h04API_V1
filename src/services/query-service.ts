@@ -27,7 +27,9 @@ export class QueryService {
     }
 
     public async createPostForTheBlog(blogId: RefType, title: string, shortDescription: string, content: string ): Promise<IPost> {
+        console.log('blogId', blogId)
         const blog: IBlog | null = await this.blogRepository.getOneBlog(blogId);
+        console.log('createPostForTheBlog', blog)
         if (blog) {
             const blogId = new mongoose.Types.ObjectId((blog?._id).toString());
             return await this.postModel.create({title, shortDescription, content, blogId, blogName: blog?.name});

@@ -29,6 +29,18 @@ const isBodyIdPattern: CustomValidator = async (value: string) => {
     return true;
 }
 
+const isTitlePattern: CustomValidator = async (value: string) => {
+
+    if (value.length > 30) {
+        console.log('For Exist!!!!!')
+        throw new Error()
+    }
+    console.log('For true!!!')
+    return true;
+}
+
+
+
 export const nameValidation = body('name')
     .trim()
     .isLength({max: 15})
@@ -56,14 +68,17 @@ export const websiteUrlValidation = body('websiteUrl')
     .custom(isWebsiteUrlPattern)
     .withMessage("YoutubeUrl has incorrect value. (YoutubeUrl doesn't match pattern)");
 
+// export const titleValidation = body('title')
+//     .trim()
+//     .isLength({max: 30})
+//     .withMessage("Title has incorrect length. (Title has more than 30 characters)")
+//     .notEmpty()
+//     .withMessage("Title has incorrect length. (Title is empty)")
+//     .isString()
+//     .withMessage("Title has incorrect value. (Title isn't string)");
 export const titleValidation = body('title')
-    .trim()
-    .isLength({max: 30})
-    .withMessage("Title has incorrect length. (Title has more than 30 characters)")
-    .notEmpty()
-    .withMessage("Title has incorrect length. (Title is empty)")
-    .isString()
-    .withMessage("Title has incorrect value. (Title isn't string)");
+     .custom(isTitlePattern)
+     .withMessage("Title has incorrect value. (Title is length)");
 
 export const shortDescriptionValidation = body('shortDescription')
     .trim()

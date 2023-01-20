@@ -108,7 +108,11 @@ export class BlogController {
     static async createPostTheBlog(req: Request, res: Response) {
         try {
             const {blogId} = req.params;
+            //console.log('blogId', blogId)
             const {title, shortDescription, content} = req.body;
+            //console.log(title)
+            //console.log(shortDescription)
+            //console.log(content)
             const queryService = new QueryService();
             const newPost: IPost | undefined = await queryService.createPostForTheBlog(blogId, title, shortDescription, content);
             if (newPost) res.status(201).json(newPost);
