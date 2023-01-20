@@ -9,11 +9,11 @@ export class PostController {
             let {pageNumber, pageSize} = req.query;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            if (pageNumber && pageSize && sortDirection && sortBy) {
-                const postService = new PostService();
-                const posts: IPost[] = await postService.getAll(+pageNumber, +pageSize, sortBy, sortDirection);
-                res.status(200).json(posts);
-            }
+            const postService = new PostService();
+            console.log('For Exist')
+            const posts: IPost[] = await postService.getAll(+pageNumber, +pageSize, sortBy, sortDirection);
+            res.status(200).json(posts);
+
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);

@@ -8,15 +8,14 @@ import {QueryService} from "../services/query-service";
 export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
-            let { pageNumber, pageSize} = req.query;
+            let {pageNumber, pageSize} = req.query;
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            if (pageNumber && pageSize && sortDirection && sortBy) {
-                const blogService = new BlogService();
-                const blogs: IBlog[] = await blogService.getAll(searchNameTerm, +pageNumber, +pageSize, sortBy, sortDirection);
-                res.status(200).json(blogs);
-            }
+            const blogService = new BlogService();
+            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, +pageNumber, +pageSize, sortBy, sortDirection);
+            res.status(200).json(blogs);
+
         } catch (error) {
             if (error instanceof Error) {
                 throw new Error(error.message);
