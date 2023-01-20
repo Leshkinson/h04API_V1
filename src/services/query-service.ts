@@ -38,7 +38,9 @@ export class QueryService {
     public async getPostsForTheBlog (blogId: RefType, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
         const blog = await this.findBlog(blogId);
         const skip: number = (+pageNumber - 1) * +pageSize;
-
-        return this.postModel.find({blogId: (blog?._id)?.toString()}).sort([[`${sortBy}`, sortDirection]]).skip(skip).limit(+pageSize);
+        if (blog) {
+            return this.postModel.find({blogId: (blog?._id)?.toString()}).sort([[`${sortBy}`, sortDirection]]).skip(skip).limit(+pageSize);
+        }
+        throw new Error();
     }
 }

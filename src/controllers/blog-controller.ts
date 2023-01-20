@@ -86,7 +86,7 @@ export class BlogController {
             let {pageNumber, pageSize} = req.query;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            if (pageNumber && pageSize && sortDirection && sortBy) {
+            if (blogId && pageNumber && pageSize && sortDirection && sortBy) {
                 const queryService = new QueryService();
                 const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +pageNumber, +pageSize, sortBy, sortDirection);
                 const result = {
