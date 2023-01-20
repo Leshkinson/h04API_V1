@@ -1,16 +1,16 @@
-import {RefType} from "mongoose";
 import {IBlog} from "../models/blog-model";
+import {RefType, SortOrder} from "mongoose";
 import {BlogsRepository} from "../repositories/blogs-repositories";
 
 export class BlogService {
     private blogRepository: BlogsRepository;
 
     constructor() {
-        this.blogRepository = new BlogsRepository()
+        this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(): Promise<IBlog[]> {
-        return await this.blogRepository.getAllBlogs()
+    public async getAll(searchNameTerm: string, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IBlog[]> {
+        return await this.blogRepository.getAllBlogs(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
     }
 
     public async create(name: string, description: string, websiteUrl: string): Promise<IBlog> {
@@ -33,16 +33,16 @@ export class BlogService {
     public async update(id: RefType, name: string, description: string, websiteUrl: string): Promise<IBlog | undefined> {
         const updateBlog: IBlog | undefined | null = await this.blogRepository.updateBlog(id, name, description, websiteUrl);
         if (updateBlog) return updateBlog;
-        throw new Error()
+        throw new Error();
     }
 
     public async delete(id: string): Promise<IBlog> {
-        const deleteBlog = await this.blogRepository.deleteBlog(id)
-        if (deleteBlog) return deleteBlog
-        throw new Error()
+        const deleteBlog = await this.blogRepository.deleteBlog(id);
+        if (deleteBlog) return deleteBlog;
+        throw new Error();
     }
 
     public async testingDelete(): Promise<void> {
-        await this.blogRepository.deleteAll()
+        await this.blogRepository.deleteAll();
     }
 }

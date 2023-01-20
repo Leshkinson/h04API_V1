@@ -6,11 +6,10 @@ import {TestController} from "../controllers/testing-controller";
 import {basicAuthorization} from "../authrizations/authorization";
 import {blogValidation, postValidation} from "../validator/validator";
 
-
 export const router = Router();
 
 /**Test**/
-router.delete('/testing/all-data', TestController.testing)
+router.delete('/testing/all-data', TestController.testing);
 
 /**Blogs**/
 router.get('/blogs', BlogController.getAllBlogs);
@@ -18,8 +17,8 @@ router.post('/blogs', basicAuthorization, blogValidation, isErrorMiddleware, Blo
 router.get('/blogs/:id', BlogController.getOneBlog);
 router.put('/blogs/:id', basicAuthorization, blogValidation, isErrorMiddleware, BlogController.updateBlog);
 router.delete('/blogs/:id', basicAuthorization, BlogController.deleteBlog);
-router.get('/blogs/:blogId/posts', basicAuthorization, BlogController.testingQuery);
-router.post('/blogs/:blogId/posts', basicAuthorization, BlogController.deleteBlog);
+router.get('/blogs/:blogId/posts', basicAuthorization, BlogController.getAllPostsForTheBlog);
+router.post('/blogs/:blogId/posts', basicAuthorization, BlogController.createPostTheBlog);
 
 
 /**Posts**/

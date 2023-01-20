@@ -1,29 +1,28 @@
 import {IBlog} from "../models/blog-model";
 import {IPost} from "../models/post-model";
+import {RefType, SortOrder} from "mongoose";
 import {PostsRepository} from "../repositories/posts-repositories";
 import {BlogsRepository} from "../repositories/blogs-repositories";
-import {RefType} from "mongoose";
 
 export class PostService {
-
     private postRepository: PostsRepository;
     private blogRepository: BlogsRepository;
 
     constructor() {
-        this.postRepository = new PostsRepository()
-        this.blogRepository = new BlogsRepository()
+        this.postRepository = new PostsRepository();
+        this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(): Promise<IPost[]> {
-        return await this.postRepository.getAllPosts();
+    public async getAll(pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
+        return await this.postRepository.getAllPosts(pageNumber, pageSize, sortBy, sortDirection);
     }
 
     public async create(title: string, shortDescription: string, content: string, blogId: string): Promise<IPost> {
-        const blog: IBlog | null = await this.blogRepository.getOneBlog(blogId)
+        const blog: IBlog | null = await this.blogRepository.getOneBlog(blogId);
         if (blog) {
-            return await this.postRepository.createPost(title, shortDescription, content, (blog?._id).toString(), blog?.name)
+            return await this.postRepository.createPost(title, shortDescription, content, (blog?._id).toString(), blog?.name);
         }
-        throw new Error()
+        throw new Error();
     }
 
     public async find(id: RefType): Promise<IPost | undefined> {
@@ -40,7 +39,6 @@ export class PostService {
     }
 
     public async update(id: RefType, title: string, shortDescription: string, content: string, blogId: string): Promise<IPost | undefined> {
-
         const blog: IBlog | undefined | null = await this.blogRepository.getOneBlog(blogId);
         const updatePost: IPost | undefined | null = await this.postRepository.updatePost(id, title, shortDescription, content, blogId);
         if (blog && updatePost) {
@@ -50,13 +48,13 @@ export class PostService {
 
             return updatePost;
         }
-        throw new Error()
+        throw new Error();
     }
 
     public async delete(id: string): Promise<IPost> {
-        const deletePost = await this.postRepository.deletePost(id)
-        if (deletePost) return deletePost
-        throw new Error()
+        const deletePost = await this.postRepository.deletePost(id);
+        if (deletePost) return deletePost;
+        throw new Error();
     }
 
     public async testingDelete(): Promise<void> {
