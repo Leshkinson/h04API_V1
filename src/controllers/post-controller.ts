@@ -2,6 +2,7 @@ import {SortOrder} from "mongoose";
 import {Request, Response} from "express";
 import {IPost} from "../models/post-model";
 import {PostService} from "../services/post-service";
+import {QueryService} from "../services/query-service";
 
 export class PostController {
     static async getAllPosts(req: Request, res: Response) {
@@ -12,7 +13,16 @@ export class PostController {
             const postService = new PostService();
             console.log('For Exist')
             const posts: IPost[] = await postService.getAll(+pageNumber, +pageSize, sortBy, sortDirection);
-            res.status(200).json(posts);
+            //res.status(200).json(posts);
+            const queryService = new QueryService();
+            const result = {
+                "pagesCount": await queryService.getCountPagesForPosts(+pageSize),
+                "page": +pageNumber,
+                "pageSize": +pageSize,
+                "totalCount": (posts.length),
+                "items": posts
+            };
+            if (result) res.status(200).json(result)
 
         } catch (error) {
             if (error instanceof Error) {

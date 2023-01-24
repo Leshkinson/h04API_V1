@@ -1,15 +1,20 @@
-import {IBlog} from "../models/blog-model";
+import {BlogModel, IBlog} from "../models/blog-model";
 import {IPost, PostModel} from "../models/post-model";
 import mongoose, {Model, RefType, SortOrder} from "mongoose";
 import {BlogsRepository} from "../repositories/blogs-repositories";
+import {PostsRepository} from "../repositories/posts-repositories";
 
 export class QueryService {
     private blogRepository: BlogsRepository;
+    private postRepository: PostsRepository;
     private postModel: Model<IPost>;
+    private blogModel: Model<IBlog>;
 
     constructor() {
         this.blogRepository = new BlogsRepository();
+        this.postRepository = new PostsRepository();
         this.postModel = PostModel;
+        this.blogModel = BlogModel;
     }
 
     public async findBlog(blogId: RefType): Promise<IBlog | undefined> {
@@ -19,7 +24,19 @@ export class QueryService {
         return blog;
     }
 
-    public async getCountPages(blogId: RefType, pageSize: number = 10) {
+    public async getCountPagesForBlogs(pageSize: number = 10) {
+        const countDocument = await this.blogModel.find().count();
+
+        return Math.ceil(countDocument/+pageSize);
+    }
+
+    public async getCountPagesForPosts(pageSize: number | undefined = 10) {
+        const countDocument = await this.postModel.find().count();
+
+        return Math.ceil(countDocument/+pageSize);
+    }
+
+    public async getCountPagesPostsForTheBlog(blogId: RefType, pageSize: number = 10) {
         const blog = await this.findBlog(blogId);
         const countDocument = await this.postModel.find({blogId: (blog?._id)?.toString()}).count();
 

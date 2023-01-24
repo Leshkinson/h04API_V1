@@ -13,7 +13,7 @@ export class PostService {
         this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
+    public async getAll(pageNumber: number | undefined = 1, pageSize: number | undefined = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
         return await this.postRepository.getAllPosts(pageNumber, pageSize, sortBy, sortDirection);
     }
 
