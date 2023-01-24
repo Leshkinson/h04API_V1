@@ -102,10 +102,10 @@ export class BlogController {
             const queryService = new QueryService();
             const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
             const result = {
-                "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +sizePage),
+                "pagesCount": await queryService.getPagesCountPostsForTheBlog(blogId, +sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
-                "totalCount": await queryService.getTotalCountForBlogs(),
+                "totalCount": await queryService.getTotalCountPagesPostsForTheBlog(blogId),
                 "items": posts
             };
             if (result) res.status(200).json(result)

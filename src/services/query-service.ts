@@ -43,7 +43,13 @@ export class QueryService {
         return Math.ceil(countDocument/+pageSize);
     }
 
-    public async getCountPagesPostsForTheBlog(blogId: RefType, pageSize: number) {
+    public async getTotalCountPagesPostsForTheBlog(blogId: RefType) {
+        const blog = await this.findBlog(blogId);
+        return this.postModel.find({blogId: (blog?._id)?.toString()}).count();
+
+    }
+
+    public async getPagesCountPostsForTheBlog(blogId: RefType, pageSize: number) {
         const blog = await this.findBlog(blogId);
         const countDocument = await this.postModel.find({blogId: (blog?._id)?.toString()}).count();
 
