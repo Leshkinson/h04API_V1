@@ -76,9 +76,6 @@ export const titleValidation = body('title')
     .withMessage("Title has incorrect length. (Title is empty)")
     .isString()
     .withMessage("Title has incorrect value. (Title isn't string)");
-// export const titleValidation = body('title')
-//      .custom(isTitlePattern)
-//      .withMessage("Title has incorrect value. (Title is length)");
 
 export const shortDescriptionValidation = body('shortDescription')
     .trim()
@@ -107,3 +104,4 @@ export const blogIdValidation = body('blogId')
 
 export const blogValidation = [nameValidation, descriptionValidation, websiteUrlValidation];
 export const postValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation]
+export const compositValidation = [nameValidation, descriptionValidation, websiteUrlValidation, titleValidation, shortDescriptionValidation, contentDescriptionValidation]
