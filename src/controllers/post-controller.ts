@@ -19,7 +19,7 @@ export class PostController {
                 "pagesCount": await queryService.getCountPagesForPosts(+sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
-                "totalCount": (posts.length),
+                "totalCount": await queryService.getTotalCountForPosts(),
                 "items": posts
             };
             if (result) res.status(200).json(result)

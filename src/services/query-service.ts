@@ -24,6 +24,13 @@ export class QueryService {
         return blog;
     }
 
+    public async getTotalCountForBlogs() {
+        return this.blogModel.find().count();
+    }
+    public async getTotalCountForPosts() {
+        return this.postModel.find().count();
+    }
+
     public async getCountPagesForBlogs(pageSize: number) {
         const countDocument = await this.blogModel.find().count();
 

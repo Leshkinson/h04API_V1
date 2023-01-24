@@ -106,7 +106,7 @@ export class BlogController {
                     "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +sizePage),
                     "page": +numberPage,
                     "pageSize": +sizePage,
-                    "totalCount": (posts.length),
+                    "totalCount": await queryService.getTotalCountForBlogs(),
                     "items": posts
                 };
                 if (result) res.status(200).json(result)
