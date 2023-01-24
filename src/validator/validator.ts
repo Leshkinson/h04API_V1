@@ -29,15 +29,15 @@ const isBodyIdPattern: CustomValidator = async (value: string) => {
     return true;
 }
 
-const isTitlePattern: CustomValidator = async (value: string) => {
-
-    if (value.length > 30) {
-        console.log('For Exist!!!!!')
-        throw new Error()
-    }
-    console.log('For true!!!')
-    return true;
-}
+// const isTitlePattern: CustomValidator = async (value: string) => {
+//
+//     if (value.length > 30) {
+//         console.log('For Exist!!!!!')
+//         throw new Error()
+//     }
+//     console.log('For true!!!')
+//     return true;
+// }
 
 
 
@@ -68,17 +68,17 @@ export const websiteUrlValidation = body('websiteUrl')
     .custom(isWebsiteUrlPattern)
     .withMessage("YoutubeUrl has incorrect value. (YoutubeUrl doesn't match pattern)");
 
-// export const titleValidation = body('title')
-//     .trim()
-//     .isLength({min: 1, max: 30})
-//     .withMessage("Title has incorrect length. (Title has more than 30 characters)")
-//     .notEmpty()
-//     .withMessage("Title has incorrect length. (Title is empty)")
-//     .isString()
-//     .withMessage("Title has incorrect value. (Title isn't string)");
 export const titleValidation = body('title')
-     .custom(isTitlePattern)
-     .withMessage("Title has incorrect value. (Title is length)");
+    .trim()
+    .isLength({min: 1, max: 30})
+    .withMessage("Title has incorrect length. (Title has more than 30 characters)")
+    .notEmpty()
+    .withMessage("Title has incorrect length. (Title is empty)")
+    .isString()
+    .withMessage("Title has incorrect value. (Title isn't string)");
+// export const titleValidation = body('title')
+//      .custom(isTitlePattern)
+//      .withMessage("Title has incorrect value. (Title is length)");
 
 export const shortDescriptionValidation = body('shortDescription')
     .trim()
@@ -106,4 +106,4 @@ export const blogIdValidation = body('blogId')
     .withMessage("BlogId has incorrect value. (BlogId not found)");
 
 export const blogValidation = [nameValidation, descriptionValidation, websiteUrlValidation];
-export const postValidation = [titleValidation, shortDescriptionValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation]
+export const postValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation]
