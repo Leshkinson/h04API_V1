@@ -9,8 +9,8 @@ export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
             //let {pageNumber, pageSize} = req.query;
-            const pageNumber = req.query.pageNumber as string | undefined;
-            const pageSize = req.query.pageSize as string | undefined
+            const pageNumber = req.query.pageNumber as string;
+            const pageSize = req.query.pageSize as string;
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;

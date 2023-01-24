@@ -7,7 +7,9 @@ import {QueryService} from "../services/query-service";
 export class PostController {
     static async getAllPosts(req: Request, res: Response) {
         try {
-            let {pageNumber, pageSize} = req.query;
+            //let {pageNumber, pageSize} = req.query;
+            const pageNumber = req.query.pageNumber as string;
+            const pageSize = req.query.pageSize as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
             const postService = new PostService();
