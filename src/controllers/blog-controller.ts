@@ -9,21 +9,21 @@ export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
             let {pageNumber, pageSize} = req.query;
-            //const pageNumber = req.query.pageNumber as string;
-            //const pageSize = req.query.pageSize as string;
-            const numberPage = pageNumber == null ? 1 : pageNumber;
-            const sizePage = pageSize == null ? 10 : pageSize;
+
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
+            const paramByFilter :  {name: {$regex: RegExp}} | {name?: undefined} = searchNameTerm ? { name: {$regex: new RegExp(`${searchNameTerm}`, 'gi')}} : {}
+            const numberPage = pageNumber == null ? 1 : pageNumber;
+            const sizePage = pageSize == null ? 10 : pageSize;
             const blogService = new BlogService();
-            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, +numberPage, +sizePage, sortBy, sortDirection);
+            const blogs: IBlog[] = await blogService.getAll(paramByFilter, +numberPage, +sizePage, sortBy, sortDirection);
             const queryService = new QueryService();
             const result = {
                 "pagesCount": await queryService.getCountPagesForBlogs(+sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
-                "totalCount": (blogs.length),
+                "totalCount": await queryService.getTotalCountForBlogs(),
                 "items": blogs
             };
             if (result) res.status(200).json(result)
