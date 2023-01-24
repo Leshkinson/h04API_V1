@@ -65,7 +65,7 @@ export class QueryService {
         const blog = await this.findBlog(blogId);
         const skip: number = (+pageNumber - 1) * +pageSize;
         if (blog) {
-            return this.postModel.find({blogId: (blog?._id)?.toString()}).sort([[`${sortBy}`, sortDirection]]).skip(skip).limit(+pageSize);
+            return this.postModel.find({blogId: (blog?._id)?.toString()}).sort({[sortBy]: sortDirection}).skip(skip).limit(+pageSize);
         }
         throw new Error();
     }
