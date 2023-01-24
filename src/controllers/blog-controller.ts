@@ -105,7 +105,7 @@ export class BlogController {
                 "pagesCount": await queryService.getPagesCountPostsForTheBlog(blogId, +sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
-                "totalCount": await queryService.getTotalCountPagesPostsForTheBlog(blogId),
+                "totalCount": await queryService.getTotalCountPostsForTheBlog(blogId),
                 "items": posts
             };
             if (result) res.status(200).json(result)
@@ -121,11 +121,7 @@ export class BlogController {
     static async createPostTheBlog(req: Request, res: Response) {
         try {
             const {blogId} = req.params;
-            //console.log('blogId', blogId)
             const {title, shortDescription, content} = req.body;
-            //console.log(title)
-            //console.log(shortDescription)
-            //console.log(content)
             const queryService = new QueryService();
             const newPost: IPost | undefined = await queryService.createPostForTheBlog(blogId, title, shortDescription, content);
             if (newPost) res.status(201).json(newPost);

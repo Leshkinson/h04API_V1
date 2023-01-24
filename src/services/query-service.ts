@@ -43,23 +43,20 @@ export class QueryService {
         return Math.ceil(countDocument/+pageSize);
     }
 
-    public async getTotalCountPagesPostsForTheBlog(blogId: RefType) {
+    public async getTotalCountPostsForTheBlog(blogId: RefType) {
         const blog = await this.findBlog(blogId);
-        return this.postModel.find({blogId: (blog?._id)?.toString()}).count();
 
+        return this.postModel.find({blogId: (blog?._id)?.toString()}).count();
     }
 
     public async getPagesCountPostsForTheBlog(blogId: RefType, pageSize: number) {
-        const blog = await this.findBlog(blogId);
-        const countDocument = await this.postModel.find({blogId: (blog?._id)?.toString()}).count();
+        const countDocument = await this.getTotalCountPostsForTheBlog(blogId);
 
         return Math.ceil(countDocument/+pageSize);
     }
 
     public async createPostForTheBlog(blogId: RefType, title: string, shortDescription: string, content: string ): Promise<IPost> {
-        console.log('blogId', blogId)
-        const blog: IBlog | null = await this.blogRepository.getOneBlog(blogId);
-        console.log('createPostForTheBlog', blog)
+        const blog = await this.findBlog(blogId);
         if (blog) {
             const blogId = new mongoose.Types.ObjectId((blog?._id).toString());
             return await this.postModel.create({title, shortDescription, content, blogId, blogName: blog?.name});
