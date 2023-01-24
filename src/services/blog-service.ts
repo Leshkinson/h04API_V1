@@ -9,7 +9,7 @@ export class BlogService {
         this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(searchNameTerm: string, pageNumber: number | undefined = 1, pageSize: number| undefined = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IBlog[]> {
+    public async getAll(searchNameTerm: string, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IBlog[]> {
         return await this.blogRepository.getAllBlogs(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
     }
 

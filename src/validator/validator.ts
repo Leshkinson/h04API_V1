@@ -29,21 +29,21 @@ const isBodyIdPattern: CustomValidator = async (value: string) => {
     return true;
 }
 
-const isTitlePattern: CustomValidator = async (value: string) => {
-
-    if (value.length > 30) {
-        console.log('For Exist!!!!!')
-        throw new Error()
-    }
-    console.log('For true!!!')
-    return true;
-}
+// const isTitlePattern: CustomValidator = async (value: string) => {
+//
+//     if (value.length > 30) {
+//         console.log('For Exist!!!!!')
+//         throw new Error()
+//     }
+//     console.log('For true!!!')
+//     return true;
+// }
 
 
 
 export const nameValidation = body('name')
     .trim()
-    .isLength({max: 15})
+    .isLength({min: 1, max: 15})
     .withMessage("Name has incorrect length. (Name has more than 15 characters)")
     .notEmpty()
     .withMessage("Name has incorrect length. (Name is empty)")
@@ -52,7 +52,7 @@ export const nameValidation = body('name')
 
 export const descriptionValidation = body('description')
     .trim()
-    .isLength({max: 500})
+    .isLength({min: 1, max: 500})
     .withMessage("Name has incorrect length. (Description has more than 500 characters)")
     .notEmpty()
     .withMessage("Name has incorrect length. (Name is empty)")
@@ -61,28 +61,28 @@ export const descriptionValidation = body('description')
 
 export const websiteUrlValidation = body('websiteUrl')
     .trim()
-    .isLength({max: 100})
+    .isLength({min: 1, max: 100})
     .withMessage("YoutubeUrl has incorrect length. (YoutubeUrl has more than 100 characters)")
     .isString()
     .withMessage("YoutubeUrl has incorrect value. (YoutubeUrl is empty)")
     .custom(isWebsiteUrlPattern)
     .withMessage("YoutubeUrl has incorrect value. (YoutubeUrl doesn't match pattern)");
 
-// export const titleValidation = body('title')
-//     .trim()
-//     .isLength({max: 30})
-//     .withMessage("Title has incorrect length. (Title has more than 30 characters)")
-//     .notEmpty()
-//     .withMessage("Title has incorrect length. (Title is empty)")
-//     .isString()
-//     .withMessage("Title has incorrect value. (Title isn't string)");
 export const titleValidation = body('title')
-     .custom(isTitlePattern)
-     .withMessage("Title has incorrect value. (Title is length)");
+    .trim()
+    .isLength({min: 1, max: 30})
+    .withMessage("Title has incorrect length. (Title has more than 30 characters)")
+    .notEmpty()
+    .withMessage("Title has incorrect length. (Title is empty)")
+    .isString()
+    .withMessage("Title has incorrect value. (Title isn't string)");
+// export const titleValidation = body('title')
+//      .custom(isTitlePattern)
+//      .withMessage("Title has incorrect value. (Title is length)");
 
 export const shortDescriptionValidation = body('shortDescription')
     .trim()
-    .isLength({max: 100})
+    .isLength({min: 1, max: 100})
     .withMessage("ShortDescription has incorrect length. (ShortDescription has more than 100 characters)")
     .notEmpty()
     .withMessage("ShortDescription has incorrect length. (ShortDescription is empty)")
@@ -91,7 +91,7 @@ export const shortDescriptionValidation = body('shortDescription')
 
 export const contentDescriptionValidation = body('content')
     .trim()
-    .isLength({max: 1000})
+    .isLength({min: 1, max: 1000})
     .withMessage("Content has incorrect length. (Content has more than 1000 characters)")
     .notEmpty()
     .withMessage("Content has incorrect length. (Content is empty)")
