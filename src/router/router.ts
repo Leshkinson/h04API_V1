@@ -18,7 +18,7 @@ router.get('/blogs/:id', BlogController.getOneBlog);
 router.put('/blogs/:id', basicAuthorization, blogValidation, isErrorMiddleware, BlogController.updateBlog);
 router.delete('/blogs/:id', basicAuthorization, BlogController.deleteBlog);
 router.get('/blogs/:blogId/posts', BlogController.getAllPostsForTheBlog);
-router.post('/blogs/:blogId/posts', basicAuthorization, postValidation, isErrorMiddleware, BlogController.createPostTheBlog);
+router.post('/blogs/:blogId/posts', basicAuthorization, blogValidation, postValidation, isErrorMiddleware, BlogController.createPostTheBlog);
 
 
 /**Posts**/
