@@ -24,19 +24,19 @@ export class QueryService {
         return blog;
     }
 
-    public async getCountPagesForBlogs(pageSize: number = 10) {
+    public async getCountPagesForBlogs(pageSize: number) {
         const countDocument = await this.blogModel.find().count();
 
         return Math.ceil(countDocument/+pageSize);
     }
 
-    public async getCountPagesForPosts(pageSize: number | undefined = 10) {
+    public async getCountPagesForPosts(pageSize: number) {
         const countDocument = await this.postModel.find().count();
 
         return Math.ceil(countDocument/+pageSize);
     }
 
-    public async getCountPagesPostsForTheBlog(blogId: RefType, pageSize: number = 10) {
+    public async getCountPagesPostsForTheBlog(blogId: RefType, pageSize: number) {
         const blog = await this.findBlog(blogId);
         const countDocument = await this.postModel.find({blogId: (blog?._id)?.toString()}).count();
 

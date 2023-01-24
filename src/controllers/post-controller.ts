@@ -8,16 +8,12 @@ export class PostController {
     static async getAllPosts(req: Request, res: Response) {
         try {
             let {pageNumber, pageSize} = req.query;
-            //const pageNumber = req.query.pageNumber as string;
-            //const pageSize = req.query.pageSize as string;
             const numberPage = pageNumber == null ? 1 : pageNumber;
             const sizePage = pageSize == null ? 10 : pageSize;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
             const postService = new PostService();
-            console.log('For Exist')
             const posts: IPost[] = await postService.getAll(+numberPage, +sizePage, sortBy, sortDirection);
-            //res.status(200).json(posts);
             const queryService = new QueryService();
             const result = {
                 "pagesCount": await queryService.getCountPagesForPosts(+sizePage),
