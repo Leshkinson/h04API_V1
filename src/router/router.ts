@@ -4,7 +4,7 @@ import {BlogController} from "../controllers/blog-controller";
 import {PostController} from "../controllers/post-controller";
 import {TestController} from "../controllers/testing-controller";
 import {basicAuthorization} from "../authrizations/authorization";
-import {blogValidation, postValidation} from "../validator/validator";
+import {blogValidation, compositValidation, postValidation} from "../validator/validator";
 
 export const router = Router();
 
@@ -18,7 +18,7 @@ router.get('/blogs/:id', BlogController.getOneBlog);
 router.put('/blogs/:id', basicAuthorization, blogValidation, isErrorMiddleware, BlogController.updateBlog);
 router.delete('/blogs/:id', basicAuthorization, BlogController.deleteBlog);
 router.get('/blogs/:blogId/posts', BlogController.getAllPostsForTheBlog);
-router.post('/blogs/:blogId/posts', basicAuthorization, blogValidation, postValidation, isErrorMiddleware, BlogController.createPostTheBlog);
+router.post('/blogs/:blogId/posts', basicAuthorization, compositValidation, isErrorMiddleware, BlogController.createPostTheBlog);
 
 
 /**Posts**/

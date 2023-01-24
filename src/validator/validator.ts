@@ -43,7 +43,7 @@ const isBodyIdPattern: CustomValidator = async (value: string) => {
 
 export const nameValidation = body('name')
     .trim()
-    .isLength({min: 1, max: 15})
+    .isLength({max: 15})
     .withMessage("Name has incorrect length. (Name has more than 15 characters)")
     .notEmpty()
     .withMessage("Name has incorrect length. (Name is empty)")
@@ -52,7 +52,7 @@ export const nameValidation = body('name')
 
 export const descriptionValidation = body('description')
     .trim()
-    .isLength({min: 1, max: 500})
+    .isLength({max: 500})
     .withMessage("Name has incorrect length. (Description has more than 500 characters)")
     .notEmpty()
     .withMessage("Name has incorrect length. (Name is empty)")
@@ -61,7 +61,7 @@ export const descriptionValidation = body('description')
 
 export const websiteUrlValidation = body('websiteUrl')
     .trim()
-    .isLength({min: 1, max: 100})
+    .isLength({max: 100})
     .withMessage("YoutubeUrl has incorrect length. (YoutubeUrl has more than 100 characters)")
     .isString()
     .withMessage("YoutubeUrl has incorrect value. (YoutubeUrl is empty)")
@@ -70,7 +70,7 @@ export const websiteUrlValidation = body('websiteUrl')
 
 export const titleValidation = body('title')
     .trim()
-    .isLength({min: 1, max: 30})
+    .isLength({max: 30})
     .withMessage("Title has incorrect length. (Title has more than 30 characters)")
     .notEmpty()
     .withMessage("Title has incorrect length. (Title is empty)")
@@ -79,7 +79,7 @@ export const titleValidation = body('title')
 
 export const shortDescriptionValidation = body('shortDescription')
     .trim()
-    .isLength({min: 1, max: 100})
+    .isLength({max: 100})
     .withMessage("ShortDescription has incorrect length. (ShortDescription has more than 100 characters)")
     .notEmpty()
     .withMessage("ShortDescription has incorrect length. (ShortDescription is empty)")
@@ -88,7 +88,7 @@ export const shortDescriptionValidation = body('shortDescription')
 
 export const contentDescriptionValidation = body('content')
     .trim()
-    .isLength({min: 1, max: 1000})
+    .isLength({ max: 1000})
     .withMessage("Content has incorrect length. (Content has more than 1000 characters)")
     .notEmpty()
     .withMessage("Content has incorrect length. (Content is empty)")
@@ -104,4 +104,4 @@ export const blogIdValidation = body('blogId')
 
 export const blogValidation = [nameValidation, descriptionValidation, websiteUrlValidation];
 export const postValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation]
-export const compositValidation = [nameValidation, descriptionValidation, websiteUrlValidation, titleValidation, shortDescriptionValidation, contentDescriptionValidation]
+export const compositValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation]
