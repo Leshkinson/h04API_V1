@@ -9,11 +9,11 @@ export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
             let {pageNumber, pageSize} = req.query;
-
+            console.log('For exist')
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            const paramByFilter :  {name: {$regex: RegExp}} | {name?: undefined} = searchNameTerm ? { name: {$regex: new RegExp(`${searchNameTerm}`, 'gi')}} : {}
+            const paramByFilter: { name: { $regex: RegExp } } | { name?: undefined } = searchNameTerm ? {name: {$regex: new RegExp(`${searchNameTerm}`, 'gi')}} : {}
             const numberPage = pageNumber == null ? 1 : pageNumber;
             const sizePage = pageSize == null ? 10 : pageSize;
             const blogService = new BlogService();
@@ -99,18 +99,17 @@ export class BlogController {
             const sizePage = pageSize == null ? 10 : pageSize;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            if (blogId && pageNumber && pageSize && sortDirection && sortBy) {
-                const queryService = new QueryService();
-                const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
-                const result = {
-                    "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +sizePage),
-                    "page": +numberPage,
-                    "pageSize": +sizePage,
-                    "totalCount": await queryService.getTotalCountForBlogs(),
-                    "items": posts
-                };
-                if (result) res.status(200).json(result)
-            }
+            const queryService = new QueryService();
+            const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
+            const result = {
+                "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +sizePage),
+                "page": +numberPage,
+                "pageSize": +sizePage,
+                "totalCount": await queryService.getTotalCountForBlogs(),
+                "items": posts
+            };
+            if (result) res.status(200).json(result)
+
         } catch (error) {
             if (error instanceof Error) {
                 res.sendStatus(404);
