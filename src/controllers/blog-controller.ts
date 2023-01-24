@@ -8,19 +8,21 @@ import {QueryService} from "../services/query-service";
 export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
-            //let {pageNumber, pageSize} = req.query;
-            const pageNumber = req.query.pageNumber as string;
-            const pageSize = req.query.pageSize as string;
+            let {pageNumber, pageSize} = req.query;
+            //const pageNumber = req.query.pageNumber as string;
+            //const pageSize = req.query.pageSize as string;
+            const numberPage = pageNumber == null ? 1 : pageNumber;
+            const sizePage = pageSize == null ? 10 : pageSize;
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
             const blogService = new BlogService();
-            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, +pageNumber, +pageSize, sortBy, sortDirection);
+            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, +numberPage, +sizePage, sortBy, sortDirection);
             const queryService = new QueryService();
             const result = {
-                "pagesCount": await queryService.getCountPagesForBlogs(+pageSize),
-                "page": +pageNumber,
-                "pageSize": +pageSize,
+                "pagesCount": await queryService.getCountPagesForBlogs(+sizePage),
+                "page": +numberPage,
+                "pageSize": +sizePage,
                 "totalCount": (blogs.length),
                 "items": blogs
             };
@@ -93,15 +95,17 @@ export class BlogController {
         try {
             const {blogId} = req.params;
             let {pageNumber, pageSize} = req.query;
+            const numberPage = pageNumber == null ? 1 : pageNumber;
+            const sizePage = pageSize == null ? 10 : pageSize;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
             if (blogId && pageNumber && pageSize && sortDirection && sortBy) {
                 const queryService = new QueryService();
-                const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +pageNumber, +pageSize, sortBy, sortDirection);
+                const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
                 const result = {
-                    "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +pageSize),
-                    "page": +pageNumber,
-                    "pageSize": +pageSize,
+                    "pagesCount": await queryService.getCountPagesPostsForTheBlog(blogId, +sizePage),
+                    "page": +numberPage,
+                    "pageSize": +sizePage,
                     "totalCount": (posts.length),
                     "items": posts
                 };
