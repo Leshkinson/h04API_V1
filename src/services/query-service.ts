@@ -27,20 +27,21 @@ export class QueryService {
     public async getTotalCountForBlogs() {
         return this.blogModel.find().count();
     }
+
     public async getTotalCountForPosts() {
         return this.postModel.find().count();
     }
 
     public async getCountPagesForBlogs(pageSize: number) {
-        const countDocument = await this.blogModel.find().count();
+        const countDocument = await this.getTotalCountForBlogs();
 
-        return Math.ceil(countDocument/+pageSize);
+        return Math.ceil(countDocument / +pageSize);
     }
 
     public async getCountPagesForPosts(pageSize: number) {
-        const countDocument = await this.postModel.find().count();
+        const countDocument = await this.getTotalCountForPosts();
 
-        return Math.ceil(countDocument/+pageSize);
+        return Math.ceil(countDocument / +pageSize);
     }
 
     public async getTotalCountPostsForTheBlog(blogId: RefType) {
@@ -52,10 +53,10 @@ export class QueryService {
     public async getPagesCountPostsForTheBlog(blogId: RefType, pageSize: number) {
         const countDocument = await this.getTotalCountPostsForTheBlog(blogId);
 
-        return Math.ceil(countDocument/+pageSize);
+        return Math.ceil(countDocument / +pageSize);
     }
 
-    public async createPostForTheBlog(blogId: RefType, title: string, shortDescription: string, content: string ): Promise<IPost> {
+    public async createPostForTheBlog(blogId: RefType, title: string, shortDescription: string, content: string): Promise<IPost> {
         const blog = await this.findBlog(blogId);
         if (blog) {
             const blogId = new mongoose.Types.ObjectId((blog?._id).toString());
@@ -64,7 +65,7 @@ export class QueryService {
         throw new Error();
     }
 
-    public async getPostsForTheBlog (blogId: RefType, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
+    public async getPostsForTheBlog(blogId: RefType, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
         const blog = await this.findBlog(blogId);
         const skip: number = (+pageNumber - 1) * +pageSize;
         if (blog) {

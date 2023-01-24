@@ -17,7 +17,7 @@ const isWebsiteUrlPattern: CustomValidator = (value: string) => {
     }
 
     return true;
-}
+};
 
 const isBodyIdPattern: CustomValidator = async (value: string) => {
     const blogService = new BlogService()
@@ -27,19 +27,7 @@ const isBodyIdPattern: CustomValidator = async (value: string) => {
     }
 
     return true;
-}
-
-// const isTitlePattern: CustomValidator = async (value: string) => {
-//
-//     if (value.length > 30) {
-//         console.log('For Exist!!!!!')
-//         throw new Error()
-//     }
-//     console.log('For true!!!')
-//     return true;
-// }
-
-
+};
 
 export const nameValidation = body('name')
     .trim()
@@ -103,5 +91,5 @@ export const blogIdValidation = body('blogId')
     .withMessage("BlogId has incorrect value. (BlogId not found)");
 
 export const blogValidation = [nameValidation, descriptionValidation, websiteUrlValidation];
-export const postValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation]
-export const compositValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation]
+export const postValidationWithoutBodyId = [titleValidation, shortDescriptionValidation, contentDescriptionValidation];
+export const postValidation = [titleValidation, shortDescriptionValidation, contentDescriptionValidation, blogIdValidation];

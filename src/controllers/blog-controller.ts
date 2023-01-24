@@ -5,6 +5,14 @@ import {IPost} from "../models/post-model";
 import {BlogService} from "../services/blog-service";
 import {QueryService} from "../services/query-service";
 
+interface Result {
+    "pagesCount": number,
+    "page": number,
+    "pageSize": number,
+    "totalCount": number,
+    "items": IBlog[] | IPost[]
+}
+
 export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
@@ -19,15 +27,14 @@ export class BlogController {
             const blogService = new BlogService();
             const blogs: IBlog[] = await blogService.getAll(paramByFilter, +numberPage, +sizePage, sortBy, sortDirection);
             const queryService = new QueryService();
-            const result = {
+            const result: Result = {
                 "pagesCount": await queryService.getCountPagesForBlogs(+sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
                 "totalCount": await queryService.getTotalCountForBlogs(),
                 "items": blogs
             };
-            if (result) res.status(200).json(result)
-
+            if (result) res.status(200).json(result);
         } catch (error) {
             if (error instanceof Error) {
                 throw new Error(error.message);
@@ -101,7 +108,7 @@ export class BlogController {
             const sortBy = req.query.sortBy as string;
             const queryService = new QueryService();
             const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
-            const result = {
+            const result : Result = {
                 "pagesCount": await queryService.getPagesCountPostsForTheBlog(blogId, +sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
