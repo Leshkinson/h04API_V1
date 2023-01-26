@@ -11,7 +11,7 @@ export class BlogsRepository {
     public async getAllBlogs(searchNameTerm: { name: { $regex: RegExp } } | { name?: undefined }, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
         const skip: number = (+pageNumber - 1) * +pageSize;
 
-        return this.blogModel.find({name: {$regex: new RegExp(`${searchNameTerm}`, 'gimu')}}).sort({[sortBy]: sortDirection}).skip(skip).limit(+pageSize);
+        return this.blogModel.find({name: {$regex: new RegExp(`${searchNameTerm}`, 'gmu')}}).sort({[sortBy]: sortDirection}).skip(skip).limit(+pageSize);
     }
 
     public async createBlog(name: string, description: string, websiteUrl: string): Promise<IBlog> {
