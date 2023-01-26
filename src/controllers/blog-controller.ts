@@ -21,7 +21,7 @@ export class BlogController {
             const searchNameTerm = req.query.sortDirection as string;
             const sortDirection = req.query.sortDirection as SortOrder;
             const sortBy = req.query.sortBy as string;
-            const paramByFilter: { name: { $regex: RegExp } } | { name?: undefined } = searchNameTerm === null ? {} : {name: {$regex: new RegExp(`${searchNameTerm}`, 'gi')}}
+            const paramByFilter: { name: { $regex: RegExp } } | { name?: undefined } = searchNameTerm === null ? {} : {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}}
             const numberPage = pageNumber == null ? 1 : pageNumber;
             const sizePage = pageSize == null ? 10 : pageSize;
             const blogService = new BlogService();
