@@ -9,8 +9,17 @@ export class BlogService {
         this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(searchNameTerm: {name: {$regex: RegExp}} | {name?: undefined}, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IBlog[]> {
-        return await this.blogRepository.getAllBlogs(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
+    public async getAll(
+        searchNameTerm: string | undefined | object,
+        pageNumber: number = 1,
+        pageSize: number = 10,
+        sortBy: string = 'createdAt',
+        sortDirection: SortOrder | undefined = 'desc'
+    ): Promise<IBlog[]> {
+        if (searchNameTerm) searchNameTerm = {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}};
+        const skip: number = Number((pageNumber - 1) * pageSize);
+
+        return await this.blogRepository.getAllBlogs(searchNameTerm, skip, pageSize, sortBy, sortDirection);
     }
 
     public async create(name: string, description: string, websiteUrl: string): Promise<IBlog> {

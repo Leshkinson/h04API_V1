@@ -8,10 +8,14 @@ export class BlogsRepository {
         this.blogModel = BlogModel;
     }
 
-    public async getAllBlogs(searchNameTerm: { name: { $regex: RegExp } } | { name?: undefined }, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
-        const skip: number = (+pageNumber - 1) * +pageSize;
-
-        return this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(+pageSize);
+    public async getAllBlogs(
+        searchNameTerm: { name: { $regex: RegExp } } | {} = {},
+        skip: number = 0,
+        limit: number = 10,
+        sortBy: string = 'createdAt',
+        sortDirection: SortOrder = 'desc'
+    ) {
+        return this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
     }
 
     public async createBlog(name: string, description: string, websiteUrl: string): Promise<IBlog> {

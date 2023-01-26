@@ -13,33 +13,36 @@ interface Result {
     "items": IBlog[] | IPost[]
 }
 
+type BlogsRequest = {
+    pageNumber?: number | undefined,
+    pageSize?: number | undefined,
+    sortBy?: string | undefined,
+    searchNameTerm?: string | undefined,
+    sortDirection?: SortOrder
+}
+
 export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
-            let {pageNumber, pageSize} = req.query;
-            console.log('For exist')
-            const searchNameTerm = req.query.sortDirection as string;
-            const sortDirection = req.query.sortDirection as SortOrder;
-            const sortBy = req.query.sortBy as string;
-            const paramByFilter: { name: { $regex: RegExp } } | { name?: undefined } = !searchNameTerm ? {} : {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}}
-            console.log(paramByFilter)
-            const numberPage = pageNumber == null ? 1 : pageNumber;
-            const sizePage = pageSize == null ? 10 : pageSize;
             const blogService = new BlogService();
-            const blogs: IBlog[] = await blogService.getAll(paramByFilter, +numberPage, +sizePage, sortBy, sortDirection);
             const queryService = new QueryService();
-            const result: Result = {
-                "pagesCount": await queryService.getCountPagesForBlogs(+sizePage),
-                "page": +numberPage,
-                "pageSize": +sizePage,
+
+            let {pageNumber, pageSize, sortBy, searchNameTerm, sortDirection} = req.query as BlogsRequest;
+            pageNumber = Number(pageNumber ?? 1);
+            pageSize = Number(pageSize ?? 10);
+
+            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
+
+            res.status(200).json({
+                "pagesCount": await queryService.getCountPagesForBlogs(pageSize),
+                "page": pageNumber,
+                "pageSize": pageSize,
                 "totalCount": await queryService.getTotalCountForBlogs(),
                 "items": blogs
-            };
-            if (result) res.status(200).json(result);
+            });
         } catch (error) {
-            if (error instanceof Error) {
+            if (error instanceof Error)
                 throw new Error(error.message);
-            }
         }
     }
 
@@ -109,7 +112,7 @@ export class BlogController {
             const sortBy = req.query.sortBy as string;
             const queryService = new QueryService();
             const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
-            const result : Result = {
+            const result: Result = {
                 "pagesCount": await queryService.getPagesCountPostsForTheBlog(blogId, +sizePage),
                 "page": +numberPage,
                 "pageSize": +sizePage,
