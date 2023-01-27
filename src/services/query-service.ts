@@ -25,6 +25,7 @@ export class QueryService {
     }
 
     public async getTotalCountForBlogs(searchNameTerm: { name: { $regex: RegExp } } | {} = {}) {
+        if (searchNameTerm) searchNameTerm = {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}};
         return this.blogModel.find(searchNameTerm).count();
     }
 
