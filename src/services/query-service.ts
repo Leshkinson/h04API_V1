@@ -28,13 +28,16 @@ export class QueryService {
         if (searchNameTerm) searchNameTerm = {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}};
         return this.blogModel.find(searchNameTerm).count();
     }
+    public async getTotalCountForBlogs2() {
+        return this.postModel.find().count();
+    }
 
     public async getTotalCountForPosts() {
         return this.postModel.find().count();
     }
 
     public async getCountPagesForBlogs(pageSize: number) {
-        const countDocument = await this.getTotalCountForBlogs();
+        const countDocument = await this.getTotalCountForBlogs2();
 
         return Math.ceil(countDocument / +pageSize);
     }
