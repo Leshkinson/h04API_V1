@@ -24,9 +24,10 @@ export class QueryService {
         return blog;
     }
 
-    public async getTotalCountForBlogs(searchNameTerm: { name: { $regex: RegExp } } | {} = {}) {
+    public async getTotalCountForBlogs(searchNameTerm: { name: { $regex: RegExp } } | {} = {}): Promise<number> {
         if (searchNameTerm) searchNameTerm = {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}};
-        return this.blogModel.find(searchNameTerm).count();
+
+        return await this.blogRepository.getBlogsCount(searchNameTerm);
     }
     public async getTotalCountForBlogs2() {
         return this.postModel.find().count();

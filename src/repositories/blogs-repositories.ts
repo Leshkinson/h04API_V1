@@ -18,6 +18,10 @@ export class BlogsRepository {
         return this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
     }
 
+    public async getBlogsCount(searchNameTerm: { name: { $regex: RegExp } } | {} = {}): Promise<number> {
+        return this.blogModel.find(searchNameTerm).count();
+    }
+
     public async createBlog(name: string, description: string, websiteUrl: string): Promise<IBlog> {
         return await this.blogModel.create({name, description, websiteUrl});
     }
