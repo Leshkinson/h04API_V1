@@ -37,7 +37,7 @@ export class BlogController {
                 "pagesCount": await queryService.getCountPagesForBlogs(pageSize),
                 "page": pageNumber,
                 "pageSize": pageSize,
-                "totalCount": await queryService.getTotalCountForBlogs(),
+                "totalCount": await queryService.getTotalCountForBlogs(searchNameTerm),
                 "items": blogs
             });
         } catch (error) {
