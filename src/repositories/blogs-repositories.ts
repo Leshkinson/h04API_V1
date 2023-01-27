@@ -17,14 +17,11 @@ export class BlogsRepository {
     ) {
         console.log(searchNameTerm, skip, limit, sortBy, sortDirection);
         const x = this.blogModel.find().sort({[sortBy]: sortDirection});
-        console.log('x', x);
         const y = this.blogModel.find({}).sort({[sortBy]: sortDirection});
-        console.log('y', y);
 
         const z = this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
-        console.log('z', z);
 
-        return z;
+        return {x, y, z};
     }
 
     public async getBlogsCount(searchNameTerm: { name: { $regex: RegExp } } | {} = {}): Promise<number> {
