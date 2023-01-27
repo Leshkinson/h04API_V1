@@ -33,6 +33,7 @@ export class BlogController {
 
             const blogs: IBlog[] = await blogService.getAll(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
             const totalCount: number = await queryService.getTotalCountForBlogs(searchNameTerm);
+            console.log(totalCount, pageSize, Math.ceil(totalCount / pageSize));
 
             res.status(200).json({
                 "pagesCount": Math.ceil(totalCount / pageSize),

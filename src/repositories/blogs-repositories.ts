@@ -15,7 +15,16 @@ export class BlogsRepository {
         sortBy: string = 'createdAt',
         sortDirection: SortOrder = 'desc'
     ) {
-        return this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
+        console.log(searchNameTerm, skip, limit, sortBy, sortDirection);
+        const x = this.blogModel.find().sort({[sortBy]: sortDirection});
+        console.log('x', x);
+        const y = this.blogModel.find({}).sort({[sortBy]: sortDirection});
+        console.log('y', y);
+
+        const z = this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
+        console.log('z', z);
+
+        return z;
     }
 
     public async getBlogsCount(searchNameTerm: { name: { $regex: RegExp } } | {} = {}): Promise<number> {
