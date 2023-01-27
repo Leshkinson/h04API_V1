@@ -31,21 +31,15 @@ export class BlogController {
             pageNumber = Number(pageNumber ?? 1);
             pageSize = Number(pageSize ?? 10);
 
-            const blogs = await blogService.getAll(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
+            const blogs: IBlog[] = await blogService.getAll(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
             const totalCount: number = await queryService.getTotalCountForBlogs(searchNameTerm);
-            console.log(totalCount, pageSize, Math.ceil(totalCount / pageSize));
 
             res.status(200).json({
                 "pagesCount": Math.ceil(totalCount / pageSize),
                 "page": pageNumber,
                 "pageSize": pageSize,
                 "totalCount": totalCount,
-                "items": blogs.z,
-
-                "x": blogs.x,
-                "x.length": blogs.x.length,
-                "y": blogs.y,
-                "y.length": blogs.y.length,
+                "items": blogs,
             });
         } catch (error) {
             if (error instanceof Error)

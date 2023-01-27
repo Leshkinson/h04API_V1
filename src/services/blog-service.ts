@@ -15,7 +15,7 @@ export class BlogService {
         pageSize: number = 10,
         sortBy: string = 'createdAt',
         sortDirection: SortOrder | undefined = 'desc'
-    ) {
+    ): Promise<IBlog[]> {
         if (searchNameTerm) searchNameTerm = {name: {$regex: new RegExp(`.*${searchNameTerm}.*`, 'i')}};
         const skip: number = Number((pageNumber - 1) * pageSize);
 

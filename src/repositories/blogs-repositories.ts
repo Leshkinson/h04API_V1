@@ -14,18 +14,12 @@ export class BlogsRepository {
         limit: number = 10,
         sortBy: string = 'createdAt',
         sortDirection: SortOrder = 'desc'
-    ) {
-        console.log(searchNameTerm, skip, limit, sortBy, sortDirection);
-        const x = this.blogModel.find().sort({[sortBy]: sortDirection});
-        const y = this.blogModel.find({}).sort({[sortBy]: sortDirection});
-
-        const z = this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
-
-        return {x, y, z};
+    ): Promise<IBlog[]> {
+        return this.blogModel.find(searchNameTerm).sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
     }
 
     public async getBlogsCount(searchNameTerm: { name: { $regex: RegExp } } | {} = {}): Promise<number> {
-        return this.blogModel.find(searchNameTerm).count();
+        return this.blogModel.countDocuments(searchNameTerm);
     }
 
     public async createBlog(name: string, description: string, websiteUrl: string): Promise<IBlog> {
