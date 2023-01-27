@@ -25,7 +25,6 @@ export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
         try {
             const blogService = new BlogService();
-            const queryService = new QueryService();
 
             let {pageNumber, pageSize, sortBy, searchNameTerm, sortDirection} = req.query as BlogsRequest;
             pageNumber = Number(pageNumber ?? 1);
@@ -34,10 +33,10 @@ export class BlogController {
             const blogs: IBlog[] = await blogService.getAll(searchNameTerm, pageNumber, pageSize, sortBy, sortDirection);
 
             res.status(200).json({
-                "pagesCount": await queryService.getCountPagesForBlogs(pageSize),
+                "pagesCount": Math.ceil(blogs.length / pageSize),
                 "page": pageNumber,
                 "pageSize": pageSize,
-                "totalCount": await queryService.getTotalCountForBlogs(searchNameTerm),
+                "totalCount": blogs.length,
                 "items": blogs
             });
         } catch (error) {
