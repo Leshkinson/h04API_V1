@@ -1,11 +1,5 @@
+import {IBlog} from "../ts/interfaces";
 import mongoose, {Schema} from "mongoose";
-
-export interface IBlog {
-    _id: mongoose.Schema.Types.ObjectId ;
-    name: string;
-    description: string;
-    websiteUrl: string;
-}
 
 export const BlogSchema = new Schema({
     //_id: {type: mongoose.Schema.Types.ObjectId},

@@ -1,13 +1,5 @@
+import {IPost} from "../ts/interfaces";
 import mongoose, {Schema} from "mongoose";
-
-export interface IPost {
-    _id: mongoose.Schema.Types.ObjectId ;
-    title: string;
-    shortDescription: string;
-    content: string;
-    blogId: string;
-    blogName: string;
-}
 
 export const PostSchema = new Schema({
     //_id: {type: mongoose.Schema.Types.ObjectId},

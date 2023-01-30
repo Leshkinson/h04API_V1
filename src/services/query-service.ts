@@ -1,5 +1,6 @@
-import {BlogModel, IBlog} from "../models/blog-model";
-import {IPost, PostModel} from "../models/post-model";
+import {IBlog, IPost} from "../ts/interfaces";
+import {BlogModel} from "../models/blog-model";
+import {PostModel} from "../models/post-model";
 import mongoose, {Model, RefType, SortOrder} from "mongoose";
 import {BlogsRepository} from "../repositories/blogs-repositories";
 import {PostsRepository} from "../repositories/posts-repositories";
@@ -30,48 +31,37 @@ export class QueryService {
 
         return await this.blogRepository.getBlogsCount(searchNameTerm);
     }
-    public async getTotalCountForBlogs2() {
+
+    public async getTotalCountForPosts(): Promise<number> {
         return this.postModel.find().count();
     }
 
-    public async getTotalCountForPosts() {
-        return this.postModel.find().count();
-    }
-
-    public async getCountPagesForBlogs(pageSize: number) {
-        const countDocument = await this.getTotalCountForBlogs2();
-
-        return Math.ceil(countDocument / +pageSize);
-    }
-
-    public async getCountPagesForPosts(pageSize: number) {
-        const countDocument = await this.getTotalCountForPosts();
-
-        return Math.ceil(countDocument / +pageSize);
-    }
-
-    public async getTotalCountPostsForTheBlog(blogId: RefType) {
+    public async getTotalCountPostsForTheBlog(blogId: RefType): Promise<number> {
         const blog = await this.findBlog(blogId);
 
         return this.postModel.find({blogId: (blog?._id)?.toString()}).count();
     }
 
-    public async getPagesCountPostsForTheBlog(blogId: RefType, pageSize: number) {
-        const countDocument = await this.getTotalCountPostsForTheBlog(blogId);
-
-        return Math.ceil(countDocument / +pageSize);
-    }
-
-    public async createPostForTheBlog(blogId: RefType, title: string, shortDescription: string, content: string): Promise<IPost> {
+    public async createPostForTheBlog(
+        blogId: RefType,
+        title: string,
+        shortDescription: string,
+        content: string): Promise<IPost> {
         const blog = await this.findBlog(blogId);
         if (blog) {
             const blogId = new mongoose.Types.ObjectId((blog?._id).toString());
+
             return await this.postModel.create({title, shortDescription, content, blogId, blogName: blog?.name});
         }
         throw new Error();
     }
 
-    public async getPostsForTheBlog(blogId: RefType, pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc') {
+    public async getPostsForTheBlog(
+        blogId: RefType,
+        pageNumber: number = 1,
+        pageSize: number = 10,
+        sortBy: string = 'createdAt',
+        sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
         const blog = await this.findBlog(blogId);
         const skip: number = (+pageNumber - 1) * +pageSize;
         if (blog) {

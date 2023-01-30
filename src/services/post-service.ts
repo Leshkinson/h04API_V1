@@ -1,6 +1,5 @@
-import {IBlog} from "../models/blog-model";
-import {IPost} from "../models/post-model";
 import {RefType, SortOrder} from "mongoose";
+import {IBlog, IPost} from "../ts/interfaces";
 import {PostsRepository} from "../repositories/posts-repositories";
 import {BlogsRepository} from "../repositories/blogs-repositories";
 
@@ -13,8 +12,14 @@ export class PostService {
         this.blogRepository = new BlogsRepository();
     }
 
-    public async getAll(pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
-        return await this.postRepository.getAllPosts(pageNumber, pageSize, sortBy, sortDirection);
+    public async getAll(
+        pageNumber: number = 1,
+        pageSize: number = 10,
+        sortBy: string = 'createdAt',
+        sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
+        const skip: number = (pageNumber - 1) * pageSize;
+
+        return await this.postRepository.getAllPosts(pageNumber, pageSize, sortBy, skip, sortDirection);
     }
 
     public async create(title: string, shortDescription: string, content: string, blogId: string): Promise<IPost> {

@@ -1,5 +1,6 @@
+import {IPost} from "../ts/interfaces";
+import {PostModel} from "../models/post-model";
 import {Model, RefType, SortOrder} from "mongoose";
-import {PostModel, IPost} from "../models/post-model";
 
 export class PostsRepository {
     private postModel: Model<IPost>;
@@ -8,10 +9,15 @@ export class PostsRepository {
         this.postModel = PostModel;
     }
 
-    public async getAllPosts(pageNumber: number = 1, pageSize: number = 10, sortBy: string = 'createdAt', sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
-        const skip: number = (+pageNumber - 1) * +pageSize;
+    public async getAllPosts(
+        pageNumber: number = 1,
+        limit: number = 10,
+        sortBy: string = 'createdAt',
+        skip: number = 0,
+        sortDirection: SortOrder = 'desc'): Promise<IPost[]> {
 
-        return this.postModel.find().sort([[`${sortBy}`, sortDirection]]).skip(skip).limit(+pageSize);
+
+        return this.postModel.find().sort({[sortBy]: sortDirection}).skip(skip).limit(limit);
     }
 
     public async createPost(title: string, shortDescription: string, content: string, blogId: string | undefined, blogName: string | undefined): Promise<IPost> {

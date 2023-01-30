@@ -1,25 +1,8 @@
-import {SortOrder} from "mongoose";
 import {Request, Response} from "express";
-import {IBlog} from "../models/blog-model";
-import {IPost} from "../models/post-model";
+import {IBlog, IPost} from "../ts/interfaces";
 import {BlogService} from "../services/blog-service";
 import {QueryService} from "../services/query-service";
-
-interface Result {
-    "pagesCount": number,
-    "page": number,
-    "pageSize": number,
-    "totalCount": number,
-    "items": IBlog[] | IPost[]
-}
-
-type BlogsRequest = {
-    pageNumber?: number | undefined,
-    pageSize?: number | undefined,
-    sortBy?: string | undefined,
-    searchNameTerm?: string | undefined,
-    sortDirection?: SortOrder
-}
+import {BlogsRequest, BlogsRequestWithoutSNT} from "../ts/types";
 
 export class BlogController {
     static async getAllBlogs(req: Request, res: Response) {
@@ -49,9 +32,11 @@ export class BlogController {
 
     static async createBlog(req: Request, res: Response) {
         try {
-            const {name, description, websiteUrl} = req.body;
             const blogService = new BlogService();
+
+            const {name, description, websiteUrl} = req.body;
             const newBlogs: IBlog = await blogService.create(name, description, websiteUrl);
+
             res.status(201).json(newBlogs);
         } catch (error) {
             if (error instanceof Error) {
@@ -62,10 +47,12 @@ export class BlogController {
 
     static async getOneBlog(req: Request, res: Response) {
         try {
-            const {id} = req.params;
             const blogService = new BlogService();
+
+            const {id} = req.params;
             const findBlog: IBlog | undefined = await blogService.getOne(id);
-            if (findBlog) res.status(200).json(findBlog);
+
+            res.status(200).json(findBlog);
         } catch (error) {
             if (error instanceof Error) {
                 res.sendStatus(404);
@@ -76,10 +63,12 @@ export class BlogController {
 
     static async updateBlog(req: Request, res: Response) {
         try {
+            const blogService = new BlogService();
+
             const {id} = req.params;
             const {name, description, websiteUrl} = req.body;
-            const blogService = new BlogService();
             const updateBlog: IBlog | undefined = await blogService.update(id, name, description, websiteUrl);
+
             if (updateBlog) res.sendStatus(204);
         } catch (error) {
             if (error instanceof Error) {
@@ -91,9 +80,11 @@ export class BlogController {
 
     static async deleteBlog(req: Request, res: Response) {
         try {
-            const {id} = req.params;
             const blogService = new BlogService();
+
+            const {id} = req.params;
             await blogService.delete(id);
+
             res.sendStatus(204);
         } catch (error) {
             if (error instanceof Error) {
@@ -105,23 +96,23 @@ export class BlogController {
 
     static async getAllPostsForTheBlog(req: Request, res: Response) {
         try {
-            const {blogId} = req.params;
-            let {pageNumber, pageSize} = req.query;
-            const numberPage = pageNumber == null ? 1 : pageNumber;
-            const sizePage = pageSize == null ? 10 : pageSize;
-            const sortDirection = req.query.sortDirection as SortOrder;
-            const sortBy = req.query.sortBy as string;
             const queryService = new QueryService();
-            const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, +numberPage, +sizePage, sortBy, sortDirection);
-            const result: Result = {
-                "pagesCount": await queryService.getPagesCountPostsForTheBlog(blogId, +sizePage),
-                "page": +numberPage,
-                "pageSize": +sizePage,
-                "totalCount": await queryService.getTotalCountPostsForTheBlog(blogId),
-                "items": posts
-            };
-            if (result) res.status(200).json(result)
 
+            const {blogId} = req.params;
+            let {pageNumber, pageSize, sortDirection, sortBy} = req.query as BlogsRequestWithoutSNT;
+            pageNumber = Number(pageNumber ?? 1);
+            pageSize = Number(pageSize ?? 10);
+
+            const posts: IPost[] = await queryService.getPostsForTheBlog(blogId, pageNumber, pageSize, sortBy, sortDirection);
+            const totalCount: number = await queryService.getTotalCountPostsForTheBlog(blogId);
+
+            res.status(200).json({
+                "pagesCount": Math.ceil(totalCount / pageSize),
+                "page": pageNumber,
+                "pageSize": pageSize,
+                "totalCount": totalCount,
+                "items": posts
+            })
         } catch (error) {
             if (error instanceof Error) {
                 res.sendStatus(404);
@@ -132,10 +123,12 @@ export class BlogController {
 
     static async createPostTheBlog(req: Request, res: Response) {
         try {
+            const queryService = new QueryService();
+
             const {blogId} = req.params;
             const {title, shortDescription, content} = req.body;
-            const queryService = new QueryService();
             const newPost: IPost | undefined = await queryService.createPostForTheBlog(blogId, title, shortDescription, content);
+
             if (newPost) res.status(201).json(newPost);
         } catch (error) {
             if (error instanceof Error) {

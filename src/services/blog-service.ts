@@ -1,4 +1,4 @@
-import {IBlog} from "../models/blog-model";
+import {IBlog} from "../ts/interfaces";
 import {RefType, SortOrder} from "mongoose";
 import {BlogsRepository} from "../repositories/blogs-repositories";
 
